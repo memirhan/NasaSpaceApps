@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinsiyet Seçimi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #002147;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar h1 {
+            color: #fff;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 80px auto; /* Navbar için boşluk bırak */
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #5c5c5c;
+        }
+
+        .soru {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9; /* Her soru için arka plan rengi */
+        }
+
+        .radio-option {
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+        }
+
+        .radio-option:hover {
+            background-color: #e7f0ff;
+            color: #0056b3;
+        }
+
+        input[type="radio"] {
+            margin-left: 10px;
+            transform: scale(1.2); /* Radio butonunu büyütme */
+            cursor: pointer;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 0; /* Butonun üst ve alt boşluğunu ayarla */
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 20px; /* Butona üstte boşluk ekle */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        h4 {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 30px;
+            }
+
+            input[type="submit"] {
+                padding: 15px 0; /* Butonun üst ve alt boşluğunu ayarla */
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Nasa Space Apps TeamYKFL Team</h1>
+    </div>
+    <h2>Kullanıcı Bilgilerini Girin</h2>
+    <div class="form-container">
+        <form action="veriGonder.php" method="POST">
+            <div class="sorular">
+                <div class="soru">
+                    <h3>Cinsiyetiniz Nedir?</h3>
+                    <label class="radio-option" for="cinsiyet-erkek">
+                        Erkek
+                        <input type="radio" id="cinsiyet-erkek" name="cinsiyet" value="erkek" required>
+                    </label>
+                    <label class="radio-option" for="cinsiyet-kiz">
+                        Kız
+                        <input type="radio" id="cinsiyet-kiz" name="cinsiyet" value="kiz" required>
+                    </label>
+                    <h4><span id="secimSonucu"></span></h4>
+                </div>
+
+                <div class="soru">
+                    <h3>Beyaz Rengi Sana Ne Hissettiriyor?</h3>
+                    <div class="duygu-options">
+                        <label class="radio-option" for="duygu_beyaz-temizlik_ferahlik">
+                            Temizlik ve Ferahlık
+                            <input type="radio" id="duygu_beyaz-temizlik_ferahlik" name="duygu_beyaz" value="temizlik_ferahlık" required>
+                        </label>
+                        <label class="radio-option" for="duygu_beyaz-bosluk">
+                            Boşluk
+                            <input type="radio" id="duygu_beyaz-bosluk" name="duygu_beyaz" value="bosluk" required>
+                        </label>
+                        <label class="radio-option" for="duygu_beyaz-umut_yenilik">
+                            Umut ve Yenilik
+                            <input type="radio" id="duygu_beyaz-umut_yenilik" name="duygu_beyaz" value="umut_yenilik" required>
+                        </label>
+                        <label class="radio-option" for="duygu_beyaz-yalnizlik">
+                            Yalnızlık
+                            <input type="radio" id="duygu_beyaz-yalnizlik" name="duygu_beyaz" value="yalnizlik" required>
+                        </label>
+                        <label class="radio-option" for="duygu_beyaz-huzur">
+                            Huzur
+                            <input type="radio" id="duygu_beyaz-huzur" name="duygu_beyaz" value="huzur" required>
+                        </label>
+                        <label class="radio-option" for="duygu_beyaz-sogukluk">
+                            Soğukluk
+                            <input type="radio" id="duygu_beyaz-sogukluk" name="duygu_beyaz" value="sogukluk" required>
+                        </label>
+                    </div>
+                    <h4><span id="secimSonucuDuyguBeyaz"></span></h4>
+                </div>
+
+                <div class="soru">
+                    <h3>Siyah Rengi Sana Ne Hissettiriyor?</h3>
+                    <div class="duygu-options">
+                        <label class="radio-option" for="duygu_siyah-temizlik_ferahlik">
+                            Temizlik ve Ferahlık
+                            <input type="radio" id="duygu_siyah-temizlik_ferahlik" name="duygu_siyah" value="temizlik_ferahlık" required>
+                        </label>
+                        <label class="radio-option" for="duygu_siyah-bosluk">
+                            Boşluk
+                            <input type="radio" id="duygu_siyah-bosluk" name="duygu_siyah" value="bosluk" required>
+                        </label>
+                        <label class="radio-option" for="duygu_siyah-umut_yenilik">
+                            Umut ve Yenilik
+                            <input type="radio" id="duygu_siyah-umut_yenilik" name="duygu_siyah" value="umut_yenilik" required>
+                        </label>
+                        <label class="radio-option" for="duygu_siyah-yalnizlik">
+                            Yalnızlık
+                            <input type="radio" id="duygu_siyah-yalnizlik" name="duygu_siyah" value="yalnizlik" required>
+                        </label>
+                        <label class="radio-option" for="duygu_siyah-huzur">
+                            Huzur
+                            <input type="radio" id="duygu_siyah-huzur" name="duygu_siyah" value="huzur" required>
+                        </label>
+                        <label class="radio-option" for="duygu_siyah-sogukluk">
+                            Soğukluk
+                            <input type="radio" id="duygu_siyah-sogukluk" name="duygu_siyah" value="sogukluk" required>
+                        </label>
+                    </div>
+                    <h4><span id="secimSonucuDuyguSiyah"></span></h4>
+                </div>
+
+                <div class="soru">
+                    <h3>Mavi Rengi Sana Ne Hissettiriyor?</h3>
+                    <div class="duygu-options">
+                        <label class="radio-option" for="duygu_mavi-temizlik_ferahlik">
+                            Temizlik ve Ferahlık
+                            <input type="radio" id="duygu_mavi-temizlik_ferahlik" name="duygu_mavi" value="temizlik_ferahlık" required>
+                        </label>
+                        <label class="radio-option" for="duygu_mavi-bosluk">
+                            Boşluk
+                            <input type="radio" id="duygu_mavi-bosluk" name="duygu_mavi" value="bosluk" required>
+                        </label>
+                        <label class="radio-option" for="duygu_mavi-umut_yenilik">
+                            Umut ve Yenilik
+                            <input type="radio" id="duygu_mavi-umut_yenilik" name="duygu_mavi" value="umut_yenilik" required>
+                        </label>
+                        <label class="radio-option" for="duygu_mavi-yalnizlik">
+                            Yalnızlık
+                            <input type="radio" id="duygu_mavi-yalnizlik" name="duygu_mavi" value="yalnizlik" required>
+                        </label>
+                        <label class="radio-option" for="duygu_mavi-huzur">
+                            Huzur
+                            <input type="radio" id="duygu_mavi-huzur" name="duygu_mavi" value="huzur" required>
+                        </label>
+                        <label class="radio-option" for="duygu_mavi-sogukluk">
+                            Soğukluk
+                            <input type="radio" id="duygu_mavi-sogukluk" name="duygu_mavi" value="sogukluk" required>
+                        </label>
+                    </div>
+                    <h4><span id="secimSonucuDuyguMavi"></span></h4>
+                </div>
+
+                <div class="soru">
+                    <h3>Kırmızı Rengi Sana Ne Hissettiriyor?</h3>
+                    <div class="duygu-options">
+                        <label class="radio-option" for="duygu_kirmizi-temizlik_ferahlik">
+                            Temizlik ve Ferahlık
+                            <input type="radio" id="duygu_kirmizi-temizlik_ferahlik" name="duygu_kirmizi" value="temizlik_ferahlık" required>
+                        </label>
+                        <label class="radio-option" for="duygu_kirmizi-bosluk">
+                            Boşluk
+                            <input type="radio" id="duygu_kirmizi-bosluk" name="duygu_kirmizi" value="bosluk" required>
+                        </label>
+                        <label class="radio-option" for="duygu_kirmizi-umut_yenilik">
+                            Umut ve Yenilik
+                            <input type="radio" id="duygu_kirmizi-umut_yenilik" name="duygu_kirmizi" value="umut_yenilik" required>
+                        </label>
+                        <label class="radio-option" for="duygu_kirmizi-yalnizlik">
+                            Yalnızlık
+                            <input type="radio" id="duygu_kirmizi-yalnizlik" name="duygu_kirmizi" value="yalnizlik" required>
+                        </label>
+                        <label class="radio-option" for="duygu_kirmizi-huzur">
+                            Huzur
+                            <input type="radio" id="duygu_kirmizi-huzur" name="duygu_kirmizi" value="huzur" required>
+                        </label>
+                        <label class="radio-option" for="duygu_kirmizi-sogukluk">
+                            Soğukluk
+                            <input type="radio" id="duygu_kirmizi-sogukluk" name="duygu_kirmizi" value="sogukluk" required>
+                        </label>
+                    </div>
+                    <h4><span id="secimSonucuDuyguKirmizi"></span></h4>
+                </div>
+
+                <div class="soru">
+                    <h3>Sarı Rengi Sana Ne Hissettiriyor?</h3>
+                    <div class="duygu-options">
+                        <label class="radio-option" for="duygu_sari-temizlik_ferahlik">
+                            Temizlik ve Ferahlık
+                            <input type="radio" id="duygu_sari-temizlik_ferahlik" name="duygu_sari" value="temizlik_ferahlık" required>
+                        </label>
+                        <label class="radio-option" for="duygu_sari-bosluk">
+                            Boşluk
+                            <input type="radio" id="duygu_sari-bosluk" name="duygu_sari" value="bosluk" required>
+                        </label>
+                        <label class="radio-option" for="duygu_sari-umut_yenilik">
+                            Umut ve Yenilik
+                            <input type="radio" id="duygu_sari-umut_yenilik" name="duygu_sari" value="umut_yenilik" required>
+                        </label>
+                        <label class="radio-option" for="duygu_sari-yalnizlik">
+                            Yalnızlık
+                            <input type="radio" id="duygu_sari-yalnizlik" name="duygu_sari" value="yalnizlik" required>
+                        </label>
+                        <label class="radio-option" for="duygu_sari-huzur">
+                            Huzur
+                            <input type="radio" id="duygu_sari-huzur" name="duygu_sari" value="huzur" required>
+                        </label>
+                        <label class="radio-option" for="duygu_sari-sogukluk">
+                            Soğukluk
+                            <input type="radio" id="duygu_sari-sogukluk" name="duygu_sari" value="sogukluk" required>
+                        </label>
+                    </div>
+                    <h4><span id="secimSonucuDuyguSari"></span></h4>
+                </div>
+            </div>
+
+            <input type="submit" value="Gönder">
+        </form>
+    </div>
+</body>
+</html>
