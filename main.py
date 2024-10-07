@@ -1,11 +1,15 @@
 import re
+import matplotlib.pyplot as plt
+import numpy as np
 from PIL import Image
 
+# SQL dosyasından verileri okuma
 try:
     with open('dbs2.sql', 'r', encoding='utf-8') as f:
         sql_verisi = f.read()
-    
+    print("SQL dosyası başarıyla okundu.")
 except FileNotFoundError:
+    print("SQL dosyası bulunamadı.")
     exit()
 
 # INSERT ifadelerini bul ve verileri işleyelim
@@ -24,8 +28,8 @@ soru1_cevaplar = [veri[2] for veri in veriler]  # İlk soruya verilen cevapları
 
 # Cinsiyete göre cevapları sayma
 cevap_dagilimi = {
-    'erkek': {'1': 0, '0': 0},
-    'kiz': {'1': 0, '0': 0}
+    'erkek': {},
+    'kiz': {}
 }
 
 # 1 ve 0 olarak sınıflandıracağımız cevaplar
@@ -47,21 +51,43 @@ for i in range(len(cinsiyetler)):
         cevap = '0'
 
     # Cinsiyet bazında cevapları toplama
-    if cinsiyet in cevap_dagilimi:
-        cevap_dagilimi[cinsiyet][cevap] += 1
+    if cinsiyet not in cevap_dagilimi:
+        cevap_dagilimi[cinsiyet] = {}
 
-# Erkek ve kızların olumlu/olumsuz kişi sayıları
-erkek_olumlu = cevap_dagilimi['erkek']['1']
-erkek_olumsuz = cevap_dagilimi['erkek']['0']
+    if cevap not in cevap_dagilimi[cinsiyet]:
+        cevap_dagilimi[cinsiyet][cevap] = 0
+    cevap_dagilimi[cinsiyet][cevap] += 1
 
-kiz_olumlu = cevap_dagilimi['kiz']['1']
-kiz_olumsuz = cevap_dagilimi['kiz']['0']
+# Renkleri analiz etme
+resim = Image.open('elma.jpeg')
+resim = resim.convert('RGB')
+pikseller = list(resim.getdata())
 
-# Sonuçları gösterme
-print(f"Erkeklerin değerlendirmesi:")
-print(f"- Erkeklerden {erkek_olumlu} kişi olumlu tepki vermiş.")
-print(f"- Erkeklerden {erkek_olumsuz} kişi olumsuz tepki vermiş.")
+# Temel renk frekanslarını tutacak bir dict
+renk_frekanslari = {
+    'Beyaz': sum(1 for r, g, b in pikseller if r > 200 and g > 200 and b > 200),
+    'Siyah': sum(1 for r, g, b in pikseller if r < 50 and g < 50 and b < 50),
+    'Mavi': sum(1 for r, g, b in pikseller if b > 150 and r < 100 and g < 100),
+    'Kırmızı': sum(1 for r, g, b in pikseller if r > 150 and g < 100 and b < 100),
+    'Sarı': sum(1 for r, g, b in pikseller if r > 150 and g > 150 and b < 100)
+}
 
-print(f"\nKızların değerlendirmesi:")
-print(f"- Kızlardan {kiz_olumlu} kişi olumlu tepki vermiş.")
-print(f"- Kızlardan {kiz_olumsuz} kişi olumsuz tepki vermiş.")
+# Analiz
+for renk, frekans in renk_frekanslari.items():
+    erkek_olumlu = cevap_dagilimi['erkek'].get('1', 0)
+    erkek_olumsuz = cevap_dagilimi['erkek'].get('0', 0)
+    kiz_olumlu = cevap_dagilimi['kiz'].get('1', 0)
+    kiz_olumsuz = cevap_dagilimi['kiz'].get('0', 0)
+
+    if frekans > 0:
+        if erkek_olumlu > 0:
+            print(f"{renk} rengini gören erkeklerin olumlu görüş sayısı: {erkek_olumlu}. Bu, erkeklerin bu resme olumlu yaklaşabileceğini gösteriyor.\n")
+        else:
+            print(f"{renk} rengini gören erkeklerin olumsuz görüş sayısı: {erkek_olumsuz}. Bu, erkeklerin bu resme olumsuz yaklaşabileceğini gösteriyor.\n")
+
+        if kiz_olumlu > 0:
+            print(f"{renk} rengini gören kızların olumlu görüş sayısı: {kiz_olumlu}. Bu, kızların bu resme olumlu yaklaşabileceğini gösteriyor.\n")
+        else:
+            print(f"{renk} rengini gören kızların olumsuz görüş sayısı: {kiz_olumsuz}. Bu, kızların bu resme olumsuz yaklaşabileceğini gösteriyor.\n")
+    else:
+        print(f"{renk} rengi yok, analiz yapılamaz.\n")
